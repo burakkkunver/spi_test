@@ -1,0 +1,27 @@
+import spidev
+import time
+
+# SPI cihazını başlat
+spi = spidev.SpiDev()
+spi.open(0, 0)  # SPI port 0, device (CS) 0
+spi.max_speed_hz = 50000  # SPI hızını ayarla (50 kHz)
+
+def spi_test():
+    try:
+        while True:
+            # Test için bir veri gönder
+            send_data = [0x01, 0x02, 0x03]  # Göndermek istediğiniz veriler
+            print(f"Gönderilen veri: {send_data}")
+            
+            # SPI üzerinden veri gönder ve yanıt al
+            received_data = spi.xfer2(send_data)
+            print(f"Alınan veri: {received_data}")
+            
+            time.sleep(1)  # 1 saniye bekle
+    except KeyboardInterrupt:
+        pass
+    finally:
+        spi.close()  # SPI cihazını kapat
+
+if __name__ == "__main__":
+    spi_test()
